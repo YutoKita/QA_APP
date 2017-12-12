@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "905954792275",
+    "firebase_url": "https://qaapp-46609.firebaseio.com",
+    "project_id": "qaapp-46609",
+    "storage_bucket": "qaapp-46609.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905954792275:android:4b610bedfecfc252",
+        "android_client_info": {
+          "package_name": "jp.techacademy.kita.yuuto.qa_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905954792275-nd8kgfteb1fbs1cca96kfvpbvc4incf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnwIbbx8yq9Uojs8LUlwTS8Tq2zK56t8c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
