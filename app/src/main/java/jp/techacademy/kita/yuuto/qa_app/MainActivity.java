@@ -207,10 +207,19 @@ public class MainActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Questionのインスタンスを渡して質問詳細画面を起動する
-                Intent intent = new Intent(getApplicationContext(), QuestionDetailActivity.class);
-                intent.putExtra("question", mQuestionArrayList.get(position));
-                startActivity(intent);
+                // ログイン済みのユーザーを取得する
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user == null) {
+                    // ログインしていなければログイン画面に遷移させる
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Questionのインスタンスを渡して質問詳細画面を起動する
+                    Intent intent = new Intent(getApplicationContext(), QuestionDetailActivity.class);
+                    intent.putExtra("question", mQuestionArrayList.get(position));
+                    startActivity(intent);
+                }
             }
         });
     }
