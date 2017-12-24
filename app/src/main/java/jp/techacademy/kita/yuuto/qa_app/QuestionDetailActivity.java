@@ -1,10 +1,13 @@
 package jp.techacademy.kita.yuuto.qa_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+
+import static jp.techacademy.kita.yuuto.qa_app.R.id.fab2;
 
 public class QuestionDetailActivity extends AppCompatActivity {
 
@@ -32,7 +37,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
 
             String answerUid = dataSnapshot.getKey();
 
-            for(Answer answer : mQuestion.getAnswers()) {
+            for (Answer answer : mQuestion.getAnswers()) {
                 // 同じAnswerUidのものが存在しているときは何もしない
                 if (answerUid.equals(answer.getAnswerUid())) {
                     return;
@@ -110,4 +115,43 @@ public class QuestionDetailActivity extends AppCompatActivity {
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
     }
+
+//        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+//        fab2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("Android", "test");
+//                if(){
+    //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
+    //ログインしている場合、ボタン押下→お気に入り解除＆お気に入りボタン。フラグ変更
+    //ログインしている場合、ボタン押下→お気に入り登録＆お気に入りボタン。フラグ変更
+    //ボタンの色を変更
+//                    Button button = (Button) findViewById(R.id.fab2);
+//                    button.setBackgroundColor(Color.rgb(0, 100, 200));
+
+//                    DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//                    DatabaseReference genreRef = dataBaseReference.child(FavoritesPATH.PATH).child(String.valueOf(mGenre));
+//            }
+//        });
+//
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Android", "onResume");
+        //ログイン済みのユーザーを取得する
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            //お気に入りボタンの非表示
+            fab2.setVisibility(View.INVISIBLE);
+        } else {
+            //お気に入りボタン表示
+            fab2.setVisibility(View.VISIBLE);
+            //firebaseのデータ読み込み mfavoriteeventlistener
+//                TODO
+        }
+    }
 }
+
+
+
