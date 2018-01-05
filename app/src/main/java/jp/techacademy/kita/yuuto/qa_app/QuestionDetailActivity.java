@@ -20,15 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-import static jp.techacademy.kita.yuuto.qa_app.R.id.fab2;
 
 public class QuestionDetailActivity extends AppCompatActivity {
 
     private ListView mListView;
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
+    private FloatingActionButton fab2;
 
     private DatabaseReference mAnswerRef;
+    private DatabaseReference dataBaseReference;
+    private DatabaseReference mFavoriteRef;
+    private boolean mFlag = false;
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -114,41 +117,47 @@ public class QuestionDetailActivity extends AppCompatActivity {
         DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
-    }
+        
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
 
-//        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-//        fab2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d("Android", "test");
-//                if(){
-    //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
-    //ログインしている場合、ボタン押下→お気に入り解除＆お気に入りボタン。フラグ変更
-    //ログインしている場合、ボタン押下→お気に入り登録＆お気に入りボタン。フラグ変更
-    //ボタンの色を変更
+            @Override
+            public void onClick(View v) {
+                if (mFlag == true) {
+                    Button button = (Button) findViewById(R.id.fab2);
+                    button.setBackgroundColor(Color.rgb(0, 100, 200));
+
+                    //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
+                    //ログインしている場合、ボタン押下→お気に入り解除＆お気に入りボタン。フラグ変更
+                    //ログインしている場合、ボタン押下→お気に入り登録＆お気に入りボタン。フラグ変更
+                    //ボタンの色を変更
 //                    Button button = (Button) findViewById(R.id.fab2);
 //                    button.setBackgroundColor(Color.rgb(0, 100, 200));
 
 //                    DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
 //                    DatabaseReference genreRef = dataBaseReference.child(FavoritesPATH.PATH).child(String.valueOf(mGenre));
-//            }
-//        });
-//
+
+                }
+            }
+        });
+        dataBaseReference = FirebaseDatabase.getInstance().getReference();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("Android", "onResume");
         //ログイン済みのユーザーを取得する
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             //お気に入りボタンの非表示
-            fab2.setVisibility(View.INVISIBLE);
+            fab2.setVisibility(View.GONE);
         } else {
             //お気に入りボタン表示
             fab2.setVisibility(View.VISIBLE);
-            //firebaseのデータ読み込み mfavoriteeventlistener
-//                TODO
+            //firebaseのデータ読み込み mFavoriteRef
+            mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
+            mFavoriteRef.addChildEventListener(mEventListener);
+
         }
     }
 }
