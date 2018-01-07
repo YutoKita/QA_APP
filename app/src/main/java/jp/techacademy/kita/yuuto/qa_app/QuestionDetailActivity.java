@@ -34,7 +34,6 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private boolean mFlag = false;
     FirebaseAuth mAuth;
 
-
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -49,6 +48,53 @@ public class QuestionDetailActivity extends AppCompatActivity {
                 }
             }
 
+            Log.d("ANDROID", map.get("body").toString()); // デバッグ用に追加
+
+            String body = (String) map.get("body");
+            String name = (String) map.get("name");
+            String uid = (String) map.get("uid");
+
+            Answer answer = new Answer(body, name, uid, answerUid);
+            mQuestion.getAnswers().add(answer);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    //お気に入りボタン押下した時のリスナーmFavoriteListener作成
+    private ChildEventListener mFavoriteListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap) dataSnapshot.getValue();
+
+            String answerUid = dataSnapshot.getKey();
+
+            for(Answer answer : mQuestion.getAnswers()) {
+                // 同じAnswerUidのものが存在しているときは何もしない
+                if (answerUid.equals(answer.getAnswerUid())) {
+                    return;
+                }
+            }
+            Log.d("ANDROID", map.get("body").toString()); // デバッグ用に追加
             String body = (String) map.get("body");
             String name = (String) map.get("name");
             String uid = (String) map.get("uid");
@@ -164,7 +210,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
             fab2.setVisibility(View.VISIBLE);
             //firebaseのデータ読み込み mFavoriteRef
             mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
-            //mFavoriteRef.addChildEventListener(FavoriteEventListener);
+            mFavoriteRef.addChildEventListener(mFavoriteListener);
         }
     }
 }
