@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
-
+import java.util.Map;
 
 public class QuestionDetailActivity extends AppCompatActivity {
 
@@ -32,6 +32,8 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private DatabaseReference dataBaseReference;
     private DatabaseReference mFavoriteRef;
     private boolean mFlag = false;
+    FirebaseAuth mAuth;
+
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -114,29 +116,35 @@ public class QuestionDetailActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+        //DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+        dataBaseReference = FirebaseDatabase.getInstance().getReference();
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
-        
+
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                //お気に入りデータを保存
+                mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+                DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+                //ファイルPATH指定
+                DatabaseReference mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
                 if (mFlag == true) {
-                    Button button = (Button) findViewById(R.id.fab2);
-                    button.setBackgroundColor(Color.rgb(0, 100, 200));
-
+                    fab2.setBackgroundColor(Color.rgb(73, 6, 248));
                     //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
-                    //ログインしている場合、ボタン押下→お気に入り解除＆お気に入りボタン。フラグ変更
-                    //ログインしている場合、ボタン押下→お気に入り登録＆お気に入りボタン。フラグ変更
-                    //ボタンの色を変更
-//                    Button button = (Button) findViewById(R.id.fab2);
-//                    button.setBackgroundColor(Color.rgb(0, 100, 200));
-
-//                    DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-//                    DatabaseReference genreRef = dataBaseReference.child(FavoritesPATH.PATH).child(String.valueOf(mGenre));
-
+                    //お気に入り解除(データ削除)
+                    mFavoriteRef.removeValue();
+                    mFlag = false;
+                } else {
+                    fab2.setBackgroundColor(Color.rgb(100, 6, 248));
+                    Map<String, String> data = new HashMap<String, String>();
+                    // UID
+                    data.put("genre", String.valueOf(mQuestion.getGenre()));
+                    mFavoriteRef.setValue(data);
+                    mFlag = true;
                 }
             }
         });
@@ -156,8 +164,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
             fab2.setVisibility(View.VISIBLE);
             //firebaseのデータ読み込み mFavoriteRef
             mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
-            mFavoriteRef.addChildEventListener(mEventListener);
-
+            //mFavoriteRef.addChildEventListener(FavoriteEventListener);
         }
     }
 }

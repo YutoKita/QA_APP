@@ -33,8 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        app:backgroundTint="#ccff0000"
+        app:backgroundTint="#ffff99"
         android:layout_margin="16dp"
+        android:background="@drawable/custom_button"
         android:src="@drawable/ic_stars_black_24dp"/>
 
 </RelativeLayout>
