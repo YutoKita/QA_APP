@@ -81,7 +81,6 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private ChildEventListener mFavoriteListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            //HashMap map = (HashMap) dataSnapshot.getValue();
             int isFavoriteNumber = (int) dataSnapshot.getValue();
 
             String answerUid = dataSnapshot.getKey();
