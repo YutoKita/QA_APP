@@ -1,6 +1,7 @@
 package jp.techacademy.kita.yuuto.qa_app;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -81,8 +83,11 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private ChildEventListener mFavoriteListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            int isFavoriteNumber = (int) dataSnapshot.getValue();
+            String str = (String)dataSnapshot.getValue();
+            // isFavoriteNumber:1 str:"1"
+            int isFavoriteNumber = Integer.parseInt(str);
 
+            //dataSnapshot:"DataSnapshot{key = genre , value = 1}"
             String answerUid = dataSnapshot.getKey();
 
             for(Answer answer : mQuestion.getAnswers()) {
@@ -176,17 +181,19 @@ public class QuestionDetailActivity extends AppCompatActivity {
                 //ファイルPATH指定
                 DatabaseReference mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
                 if (mFlag == true) {
-                    fab2.setBackgroundColor(Color.rgb(73, 6, 248));
+                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                     //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
                     //お気に入り解除(データ削除)
                     mFavoriteRef.removeValue();
+                    Toast.makeText(context, "お気に入り登録が解除されました", Toast.LENGTH_SHORT).show();
                     mFlag = false;
                 } else {
-                    fab2.setBackgroundColor(Color.rgb(100, 6, 248));
+                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
                     Map<String, String> data = new HashMap<String, String>();
                     // UID
                     data.put("genre", String.valueOf(mQuestion.getGenre()));
                     mFavoriteRef.setValue(data);
+                    Toast.makeText(context, "お気に入り登録されました", Toast.LENGTH_SHORT).show();
                     mFlag = true;
                 }
             }
