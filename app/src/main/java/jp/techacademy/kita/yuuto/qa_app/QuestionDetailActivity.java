@@ -47,9 +47,6 @@ public class QuestionDetailActivity extends AppCompatActivity {
                     return;
                 }
             }
-
-            Log.d("ANDROID", map.get("body").toString()); // デバッグ用に追加
-
             String body = (String) map.get("body");
             String name = (String) map.get("name");
             String uid = (String) map.get("uid");
@@ -84,7 +81,8 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private ChildEventListener mFavoriteListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            HashMap map = (HashMap) dataSnapshot.getValue();
+            //HashMap map = (HashMap) dataSnapshot.getValue();
+            int isFavoriteNumber = (int) dataSnapshot.getValue();
 
             String answerUid = dataSnapshot.getKey();
 
@@ -94,13 +92,13 @@ public class QuestionDetailActivity extends AppCompatActivity {
                     return;
                 }
             }
-            Log.d("ANDROID", map.get("body").toString()); // デバッグ用に追加
-            String body = (String) map.get("body");
-            String name = (String) map.get("name");
-            String uid = (String) map.get("uid");
 
-            Answer answer = new Answer(body, name, uid, answerUid);
-            mQuestion.getAnswers().add(answer);
+            //String body = (String) map.get("body");
+            //String name = (String) map.get("name");
+            //String uid = (String) map.get("uid");
+
+            //Answer answer = new Answer(body, name, uid, answerUid);
+            //mQuestion.getAnswers().add(answer);
             mAdapter.notifyDataSetChanged();
         }
 
