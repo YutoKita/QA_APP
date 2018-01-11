@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             // 変更があったQuestionを探す
-            for (Question question: mQuestionArrayList) {
+            for (Question question : mQuestionArrayList) {
                 if (dataSnapshot.getKey().equals(question.getQuestionUid())) {
                     // このアプリで変更がある可能性があるのは回答(Answer)のみ
                     question.getAnswers().clear();
@@ -175,22 +175,34 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_compter) {
                     mToolbar.setTitle("コンピューター");
                     mGenre = 4;
+                } else if (id == R.id.nav_favorite) {
+                    mToolbar.setTitle("お気に入り");
+                    mGenre = 5;
                 }
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
+                if (mGenre != 5) {
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
 
-                // 質問のリストをクリアしてから再度Adapterにセットし、AdapterをListViewにセットし直す
-                mQuestionArrayList.clear();
-                mAdapter.setQuestionArrayList(mQuestionArrayList);
-                mListView.setAdapter(mAdapter);
+                    // 質問のリストをクリアしてから再度Adapterにセットし、AdapterをListViewにセットし直す
+                    mQuestionArrayList.clear();
+                    mAdapter.setQuestionArrayList(mQuestionArrayList);
+                    mListView.setAdapter(mAdapter);
 
-                // 選択したジャンルにリスナーを登録する
-                if (mGenreRef != null) {
-                    mGenreRef.removeEventListener(mEventListener);
+                    // 選択したジャンルにリスナーを登録する
+                    if (mGenreRef != null) {
+                        mGenreRef.removeEventListener(mEventListener);
+                    }
+                    mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
+                    mGenreRef.addChildEventListener(mEventListener);
+                }else{
+                    //メニュー(お気に入りボタン)を選択するとタイトルが"お気に入り"に変更される
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                    //FavoriteActivityを作成して、FavoriteActivityに飛ばすintentを作成。四則計算アプリ
+                    Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    //onresumeでログインしているかどうか判定(記載場所はMainActivity.javaのどこか)
                 }
-                mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
-                mGenreRef.addChildEventListener(mEventListener);
                 return true;
             }
         });

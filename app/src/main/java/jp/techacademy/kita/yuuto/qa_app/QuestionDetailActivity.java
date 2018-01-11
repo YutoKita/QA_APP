@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -185,7 +186,10 @@ public class QuestionDetailActivity extends AppCompatActivity {
                     //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
                     //お気に入り解除(データ削除)
                     mFavoriteRef.removeValue();
-                    Toast.makeText(context, "お気に入り登録が解除されました", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(自分自身の, "メッセージ", Toast.LENGTH_SHORT).show();
+                    //Snackbarを利用した場合、
+                    Snackbar.make(fab2, "お気に入り登録されました", Snackbar.LENGTH_LONG).show();
+                    //Toast.makeText(QuestionDetailActivity.this, "お気に入り登録されました", Toast.LENGTH_SHORT).show();
                     mFlag = false;
                 } else {
                     fab2.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
@@ -193,7 +197,8 @@ public class QuestionDetailActivity extends AppCompatActivity {
                     // UID
                     data.put("genre", String.valueOf(mQuestion.getGenre()));
                     mFavoriteRef.setValue(data);
-                    Toast.makeText(context, "お気に入り登録されました", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(QuestionDetailActivity.this, "お気に入り登録が解除されました", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(fab2, "お気に入り登録が解除されました", Snackbar.LENGTH_LONG).show();
                     mFlag = true;
                 }
             }
