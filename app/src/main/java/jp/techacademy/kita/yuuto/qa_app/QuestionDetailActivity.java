@@ -182,23 +182,23 @@ public class QuestionDetailActivity extends AppCompatActivity {
                 //ファイルPATH指定
                 DatabaseReference mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
                 if (mFlag == true) {
-                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
                     //お気に入りしているときとしていないときで処理を分ける。フラグ作成。
                     //お気に入り解除(データ削除)
                     mFavoriteRef.removeValue();
                     //Toast.makeText(自分自身の, "メッセージ", Toast.LENGTH_SHORT).show();
                     //Snackbarを利用した場合、
-                    Snackbar.make(fab2, "お気に入り登録されました", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(fab2, "お気に入り登録が解除されました", Snackbar.LENGTH_LONG).show();
                     //Toast.makeText(QuestionDetailActivity.this, "お気に入り登録されました", Toast.LENGTH_SHORT).show();
                     mFlag = false;
                 } else {
-                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                    fab2.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                     Map<String, String> data = new HashMap<String, String>();
                     // UID
                     data.put("genre", String.valueOf(mQuestion.getGenre()));
                     mFavoriteRef.setValue(data);
                     //Toast.makeText(QuestionDetailActivity.this, "お気に入り登録が解除されました", Toast.LENGTH_SHORT).show();
-                    Snackbar.make(fab2, "お気に入り登録が解除されました", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(fab2, "お気に入り登録されました", Snackbar.LENGTH_LONG).show();
                     mFlag = true;
                 }
             }
