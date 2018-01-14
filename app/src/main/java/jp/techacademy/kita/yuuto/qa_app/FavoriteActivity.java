@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FavoriteActivity extends AppCompatActivity {
 
@@ -112,6 +113,8 @@ public class FavoriteActivity extends AppCompatActivity {
         // Firebase
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
+
+        Map<String, String> favoriteMap = new HashMap<String, String>();
 
         // ListViewの準備
         mListView = (ListView) findViewById(R.id.listView_favorite);
