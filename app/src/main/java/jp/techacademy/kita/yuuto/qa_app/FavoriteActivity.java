@@ -3,6 +3,7 @@ package jp.techacademy.kita.yuuto.qa_app;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +26,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private ListView mListView;
     private ArrayList<Question> mQuestionArrayList;
     private QuestionsListAdapter mAdapter;
+    private Toolbar mToolbar;
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -109,10 +111,12 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         //Listview初期化など
         // Firebase
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mFavoriteRef = dataBaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
+//        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference mFavoriteRef = mDatabaseReference.child(Const.FavoritesPATH).child(user.getUid());
 
         Map<String, String> favoriteMap = new HashMap<String, String>();
 
