@@ -1,6 +1,9 @@
 package jp.techacademy.kita.yuuto.qa_app;
 
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -65,7 +68,6 @@ public class FavoriteActivity extends AppCompatActivity {
                 }
 
                 int genre = Integer.parseInt(favoriteMap.get(dataSnapshot.getKey()));
-
 
                 Question question = new Question(title, body, name, uid, dataSnapshot.getKey(), genre, bytes, answerArrayList);
                 mQuestionArrayList.add(question);
@@ -150,6 +152,8 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+        setTitle("お気に入り");
+
         //Listview初期化など
         // Firebase
         favoriteMap = new HashMap<String, String>();
@@ -164,6 +168,15 @@ public class FavoriteActivity extends AppCompatActivity {
         mQuestionArrayList = new ArrayList<Question>();
         mAdapter.notifyDataSetChanged();
 
+        //メニュー(お気に入りボタン)を選択するとタイトルが"お気に入り"に変更される(どこに入れるか？)
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
+
+        // リストアダプターが favoriteMap の情報を参照し、その情報に合わせた画面を作り出し、リストビューを更新する処理
+        mQuestionArrayList.clear();
+        mAdapter.setQuestionArrayList(mQuestionArrayList);
+        mListView.setAdapter(mAdapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -173,13 +186,11 @@ public class FavoriteActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         //質問IDを取得
         for (int mGenre = 1; mGenre <= 4; mGenre++) {
             DatabaseReference mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
             mGenreRef.addChildEventListener(mEventListener);
         }
-
     }
-
-
 }

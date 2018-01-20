@@ -196,10 +196,6 @@ public class MainActivity extends AppCompatActivity {
                     mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
                     mGenreRef.addChildEventListener(mEventListener);
                 }else{
-                    //メニュー(お気に入りボタン)を選択するとタイトルが"お気に入り"に変更される(これは遷移先で記載？)
-//                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                    drawer.closeDrawer(GravityCompat.START);
-
                     //FavoriteActivityを作成して、FavoriteActivityに飛ばすintentを作成。四則計算アプリ参照した
                     Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
                     startActivity(intent);
